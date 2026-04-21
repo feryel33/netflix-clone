@@ -44,4 +44,5 @@ jobs:
         run: cd frontend && npm run build
 
       - name: Build Docker image
-        run: docker build -f frontend/Dockerfile -t netflix-frontend ./frontend
+        run: docker build -t netflix-frontend ./frontend
+
