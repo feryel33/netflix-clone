@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netflix-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: netflix-backend
+  template:
+    metadata:
+      labels:
+        app: netflix-backend
+    spec:
+      containers:
+      - name: backend
+        image: netflix-backend:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
+        env:
+        - name: PORT
+          value: "5000"
+        - name: NODE_ENV
+          value: "production"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: netflix-backend
+spec:
+  selector:
+    app: netflix-backend
+  ports:
+  - port: 5000
+    targetPort: 5000
+  type: ClusterIP
