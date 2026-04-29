@@ -22,15 +22,21 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Lint
+        run: npm run lint
+
+      - name: Run tests
+        run: npm test -- --watchAll=false --passWithNoTests
+
       - name: Build Docker image
         run: docker build -f Dockerfile.backend -t netflix-backend .
 
-      - name: Scan Docker image with Trivy
+      - name: Scan with Trivy
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: netflix-backend
           format: table
-          exit-code: '0'
+          exit-code: '1'
           severity: CRITICAL,HIGH
 
   frontend:
@@ -48,37 +54,40 @@ jobs:
       - name: Install dependencies
         run: cd frontend && npm install
 
+      - name: Lint
+        run: cd frontend && npm run lint
+
       - name: Build frontend
         run: cd frontend && npm run build
 
       - name: Build Docker image
         run: docker build -t netflix-frontend ./frontend
 
-      - name: Scan Docker image with Trivy
+      - name: Scan with Trivy
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: netflix-frontend
           format: table
-          exit-code: '0'
+          exit-code: '1'
           severity: CRITICAL,HIGH
 
   sonarcloud:
-      name: SonarCloud Analysis
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v4
-          with:
-            fetch-depth: 0
+    name: SonarCloud Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-        - name: SonarCloud Scan
-          uses: SonarSource/sonarcloud-github-action@master
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          with:
-            args: >
-              -Dsonar.organization=feryel33
-              -Dsonar.projectKey=feryel33_netflix-clone
-              -Dsonar.sources=.
-              -Dsonar.exclusions=**/node_modules/**
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.organization=feryel33
+            -Dsonar.projectKey=feryel33_netflix-clone
+            -Dsonar.sources=.
+            -Dsonar.exclusions=**/node_modules/**

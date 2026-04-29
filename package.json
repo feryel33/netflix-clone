@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "node --watch backend/server.js"
+    "dev": "node --watch backend/server.js",
+    "lint": "eslint .",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest --watchAll=false --passWithNoTests"
   },
   "keywords": [],
   "author": "",
@@ -19,5 +21,10 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.13.2",
     "netflix_c": "file:"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.2.1",
+    "jest": "^30.3.0"
   }
 }

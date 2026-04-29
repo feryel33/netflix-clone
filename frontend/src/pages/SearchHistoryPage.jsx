@@ -28,7 +28,7 @@ const SearchHistoryPage = () => {
 			try {
 				const res = await axios.get(`/api/v1/search/history`);
 				setSearchHistory(res.data.content);
-			} catch (error) {
+			} catch {
 				setSearchHistory([]);
 			}
 		};
@@ -39,7 +39,7 @@ const SearchHistoryPage = () => {
 		try {
 			await axios.delete(`/api/v1/search/history/${entry.id}`);
 			setSearchHistory(searchHistory.filter((item) => item.id !== entry.id));
-		} catch (error) {
+		} catch {
 			toast.error("Failed to delete search item");
 		}
 	};
