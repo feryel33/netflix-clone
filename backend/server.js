@@ -7,6 +7,7 @@ import searchRoutes from './routes/search.route.js';
 import { ENV_VARS } from './config/envVars.js';
 import { connectDB } from './config/db.js';
 import cookieParser from 'cookie-parser';
+import metricsRoute from './routes/metrics.route.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -21,6 +22,7 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/movie", protectRoute, movieRoutes);
 app.use("/api/v1/tv", protectRoute, tvRoutes);
 app.use("/api/v1/search", protectRoute, searchRoutes);
+app.use("/api/metrics", metricsRoute);
 
 if (ENV_VARS.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
