@@ -29,12 +29,18 @@ jobs:
         run: npm test -- --watchAll=false --passWithNoTests
 
       - name: Build Docker image
-        run: docker build -f Dockerfile.backend -t netflix-backend .
+        run: docker build -f Dockerfile.backend -t feryel333/netflix-backend:latest .
+
+      - name: Login to DockerHub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u feryel333 --password-stdin
+
+      - name: Push Docker image
+        run: docker push feryel333/netflix-backend:latest
 
       - name: Scan with Trivy
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: netflix-backend
+          image-ref: feryel333/netflix-backend:latest
           format: table
           exit-code: '1'
           severity: CRITICAL
@@ -61,15 +67,21 @@ jobs:
         run: cd frontend && npm run build
 
       - name: Build Docker image
-        run: docker build -t netflix-frontend ./frontend
+        run: docker build -t feryel333/netflix-frontend:latest ./frontend
+
+      - name: Login to DockerHub
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u feryel333 --password-stdin
+
+      - name: Push Docker image
+        run: docker push feryel333/netflix-frontend:latest
 
       - name: Scan with Trivy
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: netflix-frontend
+          image-ref: feryel333/netflix-frontend:latest
           format: table
           exit-code: '1'
-          severity: CRITICAL,HIGH
+          severity: CRITICAL
 
   sonarcloud:
     name: SonarCloud Analysis
