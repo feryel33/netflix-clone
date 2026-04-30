@@ -4,7 +4,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "node --watch backend/server.js",
-    "lint": "eslint .",
+    "lint": "eslint backend/",
     "test": "node --experimental-vm-modules node_modules/.bin/jest --watchAll=false --passWithNoTests"
   },
   "keywords": [],
